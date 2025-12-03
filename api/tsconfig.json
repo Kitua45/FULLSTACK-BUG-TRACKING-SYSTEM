@@ -1,0 +1,26 @@
+{
+  "compilerOptions": {
+  
+    "module": "nodenext", //enables to wors with common js and es versions of js 
+    "target": "es2022", //specifies compiler you target for ts files 
+    "rootDir": "./src", //tell compiler that all ts files are eld in the specified directory
+    "moduleResolution": "nodenext", //controls how modules are found in our project
+    "outDir": "./dist", //tells compiler where to store js files compiled from ts files 
+
+    "esModuleInterop": true, 
+    "forceConsistentCasingInFileNames": true, //ensures file imports are case sensitive
+
+    "strict": true, //restricts to defining datatypes of variables 
+
+    "skipLibCheck": true,
+  },
+
+  "include": [ //specify root folder for ts
+    "src/**/*"
+  ],
+  "exclude": [ //specify diresctories not to be included in compilation
+    "node_modules",
+    "dist",
+    "**/*.spec.ts"
+  ]
+}
