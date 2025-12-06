@@ -1,76 +1,97 @@
+// src/repositories/comments.repository.ts
 import { getPool } from "../db/config";
 import { Comment, UpdateComment } from "../Types/comments.types";
 
-// Fetch all comments
-export const getAllComments = async (): Promise<Comment[]> => {
-  const pool = await getPool();
-  const result = await pool.request().query("SELECT * FROM Comments");
-  return result.recordset;
-};
+export class CommentsRepository {
+  private table = "Comments";
 
-// Get comment by ID
-export const getCommentById = async (id: number) => {
-  const query = `
-    SELECT * FROM Comments WHERE commentid = @id
-  `;
-  const pool = await getPool();
+  // Fetch all comments
+  async getAllComments(): Promise<Comment[]> {
+    const pool = await getPool();
+    const result = await pool.request().query(`SELECT * FROM ${this.table}`);
+    return result.recordset;
+  }
 
-  const result = await pool.request().input("id", id).query(query);
-  return result.recordset[0];
-};
+  // Get comment by ID
+  async getCommentById(commentid: number): Promise<Comment | null> {
+    const pool = await getPool();
+    const result = await pool
+      .request()
+      .input("commentid", commentid)
+      .query(`SELECT * FROM ${this.table} WHERE commentid = @commentid`);
+    return result.recordset[0] ?? null;
+  }
 
-// Get comments by bug ID
-export const getCommentsByBugId = async (bugid: number): Promise<Comment[] | null> => {
-  const pool = await getPool();
-  const result = await pool
-    .request()
-    .input("bugid", bugid)
-    .query("SELECT * FROM Comments WHERE bugid = @bugid");
-  return result.recordset;
-};
+  // Get comments by bug ID
+  async getCommentsByBugId(bugid: number): Promise<Comment[]> {
+    const pool = await getPool();
+    const result = await pool
+      .request()
+      .input("bugid", bugid)
+      .query(`SELECT * FROM ${this.table} WHERE bugid = @bugid ORDER BY timestamp ASC`);
+    return result.recordset;
+  }
 
-// Create a new comment
-export const createComment = async (comment: Comment): Promise<void> => {
-  const pool = await getPool();
-  await pool
-    .request()
-    .input("bugid", comment.bugid)
-    .input("userid", comment.userid)
-    .input("content", comment.content)
-    .query(
-      "INSERT INTO Comments (bugid, userid, content, timestamp) VALUES (@bugid, @userid, @content, GETDATE())"
-    );
-};
+  // Create a new comment
+  async createComment(comment: Omit<Comment, "commentid" | "timestamp">): Promise<Comment> {
+    const pool = await getPool();
+    const result = await pool
+      .request()
+      .input("bugid", comment.bugid)
+      .input("userid", comment.userid)
+      .input("content", comment.content)
+      .query(`
+        INSERT INTO ${this.table} (bugid, userid, content, timestamp)
+        OUTPUT INSERTED.*
+        VALUES (@bugid, @userid, @content, GETDATE())
+      `);
+    return result.recordset[0];
+  }
 
-// Delete a comment
-export const deleteComment = async (commentid: number): Promise<void> => {
-  const pool = await getPool();
-  await pool
-    .request()
-    .input("commentid", commentid)
-    .query("DELETE FROM Comments WHERE commentid = @commentid");
-};
+  // Update a comment
+  async updateComment(id: number, commentData: Partial<UpdateComment>): Promise<Comment> {
+    const pool = await getPool();
+    const request = pool.request();
 
-//update comment
-export const updateComment = async (
-  id: number,
-  commentData: UpdateComment
-): Promise<{ message: string }> => {
-  const pool = await getPool();
-  await pool
-    .request()
-    .input("id", id)
-    .input("bugid", commentData.bugid)
-    .input("userid", commentData.userid)
-    .input("content", commentData.content)
-    .query(`
-      UPDATE comments 
-      SET bug_id = @bugid,
-          user_id = @userid,
-          content = @content
+    const fields = Object.entries(commentData)
+      .filter(([_, value]) => value !== undefined)
+      .map(([key, value]) => {
+        request.input(key, value);
+        return `${key} = @${key}`;
+      });
+
+    if (fields.length === 0) {
+      throw new Error("No fields provided for update");
+    }
+
+    request.input("id", id);
+    const query = `
+      UPDATE ${this.table} 
+      SET ${fields.join(", ")}
+      OUTPUT INSERTED.*
       WHERE commentid = @id
-    `);
+    `;
+    const result = await request.query(query);
+    if (!result.recordset[0]) {
+      throw new Error("Comment not found");
+    }
+    return result.recordset[0];
+  }
 
-  return { message: "Comment updated successfully" };
-};
-
+  // Delete a comment
+  async deleteComment(commentid: number): Promise<Comment> {
+    const pool = await getPool();
+    const result = await pool
+      .request()
+      .input("commentid", commentid)
+      .query(`
+        DELETE FROM ${this.table}
+        OUTPUT DELETED.*
+        WHERE commentid = @commentid
+      `);
+    if (!result.recordset[0]) {
+      throw new Error("Comment not found");
+    }
+    return result.recordset[0];
+  }
+}

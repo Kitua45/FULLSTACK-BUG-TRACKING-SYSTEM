@@ -1,19 +1,13 @@
+import { Express } from "express";
+import { BugsController } from "../controllers/bugs.controller";
 
-import { Express} from 'express';
-import * as bugsController  from '../controllers/bugs.controller';
-
-
-const bugsRoutes = (app: Express) => {
-    
-        app.get("/getbugs/:project_id", bugsController.listbyProject);
-        app.get("/allbugs", bugsController.getAll);
-        app.get("/bugs/:id", bugsController.getBug);
-        app.post("/createbug", bugsController.createBug);
-        app.put("/bugs/:id", bugsController.updateBug);
-        app.delete("/bugs/:id", bugsController.deleteBug);
+export const bugsRoutes = (app: Express) => {
+    app.get("/getbugs/:projectid", BugsController.listByProject);
+    app.get("/allbugs", BugsController.getAll);
+    app.get("/bugs/:id", BugsController.get);
+    app.post("/createbug", BugsController.create);
+    app.put("/bugs/:id", BugsController.update);
+    app.delete("/bugs/:id", BugsController.remove);
 };
 
 
-
-
-export default bugsRoutes;

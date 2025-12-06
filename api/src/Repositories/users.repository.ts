@@ -43,7 +43,7 @@ export const createUser = async (user: NewUser) => {
         .input('first_name', user.first_name)
         .input('last_name', user.last_name)
         .input('email', user.email)
-        .input('role_user', user.role_user)
+        .input('role_user', 'user')
         .input('password_hash', user.password_hash || 'defaultpasswordhash')
         .input('created_at', new Date())
         .query(`

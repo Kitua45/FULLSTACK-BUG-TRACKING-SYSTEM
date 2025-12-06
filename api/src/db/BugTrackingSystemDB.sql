@@ -15,6 +15,32 @@ ALTER TABLE Users
 ADD verification_code VARCHAR(10),
     is_verified BIT DEFAULT 0;
 
+ALTER TABLE Users
+ADD role VARCHAR(10) NOT NULL DEFAULT 'user';
+
+ALTER TABLE Users
+DROP CONSTRAINT CK__Users__role_user__5DCAEF64;
+
+ALTER TABLE Users
+ADD CONSTRAINT DF_Users_role_user DEFAULT 'user' FOR role_user;
+
+ALTER TABLE Users
+ADD CONSTRAINT CK_Users_role_user
+CHECK (role_user IN ('admin', 'developer', 'tester', 'MLops', 'QA', 'user'));
+ALTER TABLE Users DROP CONSTRAINT DF_Users_role_user;
+
+INSERT INTO Users (first_name, last_name, email, role_user, password_hash)
+VALUES (
+    'Max',
+    'Chebet',
+    'maxchebet@gmail.com',
+    'admin',
+    CONVERT(VARCHAR(255), HASHBYTES('SHA2_256', 'max123'), 2)
+);
+
+
+ALTER TABLE Users ADD CONSTRAINT DF_Users_role_user DEFAULT 'user' FOR role_user;
+
 
 -- Sample data for Users table
 INSERT INTO Users (first_name, last_name, email, role_user, password_hash, created_at)
@@ -92,6 +118,7 @@ VALUES
 
 -- view Bugs records 
 SELECT *FROM Bugs
+SELECT *FROM Projects
 
 
 

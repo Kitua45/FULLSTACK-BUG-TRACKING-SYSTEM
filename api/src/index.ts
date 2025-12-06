@@ -3,7 +3,7 @@ import express from 'express'
 import userRoutes from './router/users.routes'
 import projectRoutes from './router/project.routes'
 import commentRoutes from './router/comments.routes'
-import bugsRoutes from './router/bugs.routes'
+import { bugsRoutes } from './router/bugs.routes'
 
 import { logger } from './middleware/logger';
 import { rateLimiterMiddleware } from './middleware/rateLimiter';

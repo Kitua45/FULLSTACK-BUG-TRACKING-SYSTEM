@@ -4,12 +4,20 @@ import * as commentController from "../controllers/comments.controllers";
 const commentRoutes = (app:Express) => {
 
 // Routes for Comments
+// Get all comments
 app.get("/comments", commentController.getAllComments);
-app.get("/comments/:bugid", commentController.getCommentsByBugId);
+
+// Get comments for a specific bug
+app.get("/comments/bug/:bugid", commentController.getCommentsByBugId);
+
+// Create a comment
 app.post("/comments", commentController.createComment);
-app.delete("/comments/:commentid", commentController.deleteComment);
+
+// Update a comment
 app.put("/comments/:id", commentController.updateComment);
 
+// Delete a comment
+app.delete("/comments/:id", commentController.deleteComment);
 }
 export default commentRoutes ;
 

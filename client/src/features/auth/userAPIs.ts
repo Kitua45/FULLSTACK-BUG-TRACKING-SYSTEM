@@ -5,7 +5,7 @@ import { ApiDomain } from "../../utils/ApiDomain";
 
 
 export type TUser = {
-    
+    message: string
     userid: number
     first_name: string
     last_name: string

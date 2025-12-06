@@ -1,94 +1,101 @@
 import { Request, Response } from "express";
-import * as projectServices from '../services/project.service'
+import * as projectServices from '../services/project.service';
 
 
-//get all project
+// GET ALL PROJECTS
+
 export const getAllProjects = async (req: Request, res: Response) => {
-    try {
-        const project = await projectServices.listProjects();
-        res.status(200).json(project);
-    } catch (error: any) {
-        res.status(500).json({ error: error.message });
-    }
-}
+  try {
+    const projects = await projectServices.listProjects();
+    res.status(200).json(projects);
+  } catch (error: any) {
+    console.error("Error fetching all projects:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
 
+// GET PROJECT BY ID
 
-//get project by id
 export const getProjectById = async (req: Request, res: Response) => {
-    const id = parseInt(req.params.id)
-    try {
-        const project = await projectServices.getProject(id)
-        res.status(200).json(project)
-
-    } catch (error: any) {
-        if (error.message === 'Inavlid projectid') {
-            res.status(400).json({ message: 'Inavlid projectid' })
-        } else if (error.message == 'Project not found') {
-            res.status(404).json({ message: 'Project not found' })
-        } else {
-            res.status(500).json({ error: 'Internal server error' })
-        }
-    }
-}
-
-//create new project
-export const createNewProject = async (req: Request, res: Response) => {
-    const project = req.body;
-    const authUser = (req as any).user;
-    console.log(authUser)
-    try {
-        const result = await projectServices.createNewProject(project,authUser); 
-        res.status(201).json(result);
-    } catch (error: any) {
-        res.status(500).json({ error: error.message });
-    }
-}
-
-
-//update a project
-export const updateProject = async (req: Request, res: Response) => {
   const id = parseInt(req.params.id, 10);
-  const projectData = req.body;
-  const authUser = (req as any).user;
+
+  if (isNaN(id)) {
+    return res.status(400).json({ message: "Invalid project ID" });
+  }
 
   try {
-    const result = await projectServices.updateProject(id, projectData, authUser);
-    res.status(200).json(result);
+    const project = await projectServices.getProject(id);
+    res.status(200).json(project);
   } catch (error: any) {
-    if (error.message === "Invalid project ID") {
-      res.status(400).json({ message: "Invalid project ID" });
-    } else if (error.message === "Project not found") {
+    if (error.message === "Project not found") {
       res.status(404).json({ message: "Project not found" });
-    } else if (error.message === "No data provided for update") {
-      res.status(400).json({ message: "No fields provided for update" });
-    } else if(error.message==="Unauthorized") {
-      res.status(403).json({ message: "Forbidden: You cannot modify this project" });
-    }
-    else {
+    } else {
+      console.error("Error fetching project by ID:", error);
       res.status(500).json({ error: "Internal server error" });
-      console.error("Error updating project:", error);
     }
   }
 };
 
 
+// CREATE NEW PROJECT
 
-// delete a project by id
-export const deleteProject = async (req: Request, res: Response) => {
-    const id = parseInt(req.params.id);
+export const createNewProject = async (req: Request, res: Response) => {
+  const projectData = req.body;
 
-    try {
-        const result = await projectServices.deleteProject(id)
-        res.status(200).json(result)
-    } catch (error: any) {
-        if (error.message === 'Inavlid projectid') {
-            res.status(400).json({ message: 'Inavlid projectid' })
-        } else if (error.message == 'Project not found') {
-            res.status(404).json({ message: 'Project not found' })
-        } else {
+  try {
+    const result = await projectServices.createNewProject(projectData);
+    res.status(201).json(result);
+  } catch (error: any) {
+    console.error("Error creating project:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
 
-            res.status(500).json({ error: error.message })
-        }
 
+// UPDATE PROJECT
+
+export const updateProject = async (req: Request, res: Response) => {
+  const id = parseInt(req.params.id, 10);
+  const projectData = req.body;
+
+  if (isNaN(id)) {
+    return res.status(400).json({ message: "Invalid project ID" });
+  }
+
+  try {
+    const result = await projectServices.updateProject(id, projectData);
+    res.status(200).json(result);
+  } catch (error: any) {
+    if (error.message === "Project not found") {
+      res.status(404).json({ message: "Project not found" });
+    } else if (error.message === "No data provided for update") {
+      res.status(400).json({ message: "No fields provided for update" });
+    } else {
+      console.error("Error updating project:", error);
+      res.status(500).json({ error: "Internal server error" });
     }
-}
+  }
+};
+
+
+// DELETE PROJECT
+
+export const deleteProject = async (req: Request, res: Response) => {
+  const id = parseInt(req.params.id, 10);
+
+  if (isNaN(id)) {
+    return res.status(400).json({ message: "Invalid project ID" });
+  }
+
+  try {
+    const result = await projectServices.deleteProject(id);
+    res.status(200).json(result);
+  } catch (error: any) {
+    if (error.message === "Project not found") {
+      res.status(404).json({ message: "Project not found" });
+    } else {
+      console.error("Error deleting project:", error);
+      res.status(500).json({ error: "Internal server error" });
+    }
+  }
+};

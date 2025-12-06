@@ -9,7 +9,7 @@ export class BugsService {
   async createBug(payload: Bug) {
     if (!payload.title || payload.title.length < 3)
       throw new Error('Title is required and must be at least 3 characters');
-    if (!payload.project_id)
+    if (!payload.projectid)
       throw new Error('Project ID is required');
 
     payload.status = payload.status ?? 'open';
