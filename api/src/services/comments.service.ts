@@ -58,4 +58,13 @@ export const deleteComment = async (id: number): Promise<Comment> => {
   return deleted;
 };
 
+export const commentService = {
+  getAllComments,
+  getCommentsByBugId,
+  getCommentById,
+  createComment,
+  updateComment,
+  deleteComment,
+};
+
 

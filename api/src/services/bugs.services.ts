@@ -1,4 +1,4 @@
-// src/services/bugs.service.ts
+
 import { BugsRepository } from '../Repositories/bugs.repository';
 import { Bug } from '../Types/bugs.types';
 

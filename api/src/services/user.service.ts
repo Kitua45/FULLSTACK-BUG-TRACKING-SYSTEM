@@ -140,9 +140,18 @@ export const verifyUser = async (email: string, code: string) => {
     // Send success notification
     await sendEmail(
         user.email,
-        'Your email has been verified - Todo App',
+        'Your email has been verified - Bug Tracking System',
         emailTemplate.verifiedSuccess(user.first_name)
     );
 
     return { message: 'User verified successfully' };
 }
+export const userService = {
+  listUsers,
+  getUser,
+  createUser,
+  updateUser,
+  deleteUser,
+  loginUser,
+  verifyUser
+};

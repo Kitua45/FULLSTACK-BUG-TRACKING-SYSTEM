@@ -1,4 +1,4 @@
-// Full Project type 
+
 export interface Project {
     projectid: number; 
     title: string    
@@ -7,7 +7,7 @@ export interface Project {
     created_at: Date;
 }
 
-// Type for creating a new project
+//new project
 export interface ProjectMember {
   userid: number;
   role: string;
