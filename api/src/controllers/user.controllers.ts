@@ -42,23 +42,32 @@ export const createUser = async (req: Request, res:Response) => {
     }
 }
 
+//updating user
 
-//update a user
-export const updateUser = async (req:Request, res:Response) => {
+export const updateUser = async (req: Request, res: Response) => {
     const id = parseInt(req.params.id);
 
-    //update
     try {
         const user = req.body;
+
+        if (!user || Object.keys(user).length === 0) {
+            return res.status(400).json({ message: "No data provided for update" });
+        }
+
         const result = await userService.updateUser(id, user);
         res.status(200).json(result);
-    } catch (error: any) {
-        if (error.message === 'Invalid userid') {
-            res.status(400).json({ message: 'Invalid userid' })
+
+    } catch (error: unknown) {
+        if (error instanceof Error) {
+            if (error.message === 'Invalid userid') {
+                res.status(400).json({ message: 'Invalid userid' });
             } else if (error.message === 'User not found') {
-            res.status(404).json({ message: 'User not found' })
+                res.status(404).json({ message: 'User not found' });
             } else {
-            res.status(500).json({ error: error.message });
+                res.status(500).json({ error: error.message });
+            }
+        } else {
+            res.status(500).json({ error: "Unknown error" });
         }
     }
 }

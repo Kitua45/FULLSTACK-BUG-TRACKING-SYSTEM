@@ -1,4 +1,4 @@
-// src/repositories/comments.repository.ts
+
 import { getPool } from "../db/config";
 import { Comment, UpdateComment } from "../Types/comments.types";
 

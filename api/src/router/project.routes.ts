@@ -1,6 +1,6 @@
 import { Express } from "express";
 import * as projectController from "../controllers/project.controllers";
-import { adminOrDeveloper,adminOnly } from "../middleware/bearAuth";
+
 
 const projectRoutes = (app: Express) => {
     app.get("/projects", projectController.getAllProjects);

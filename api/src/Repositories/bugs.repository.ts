@@ -1,4 +1,4 @@
-// src/repositories/bugs.repository.ts
+
 import { getPool } from '../db/config';
 import * as mssql from 'mssql';
 import { Bug } from '../Types/bugs.types';
@@ -106,3 +106,17 @@ export class BugsRepository {
   }
 }
 
+
+const bugsRepo = new BugsRepository();
+
+
+const BugsRepo = {
+  getAllBugs: bugsRepo.getAllBugs.bind(bugsRepo),
+  findById: bugsRepo.findById.bind(bugsRepo),
+  findAllByProject: bugsRepo.findAllByProject.bind(bugsRepo),
+  create: bugsRepo.create.bind(bugsRepo),
+  update: bugsRepo.update.bind(bugsRepo),
+  delete: bugsRepo.delete.bind(bugsRepo),
+};
+
+export default BugsRepo;

@@ -23,8 +23,7 @@ const initializeApp = () => {
         methods: ["GET", "POST", "PUT", "DELETE"],
     }))
 
-    //middleware
-    app.use(express.json()); //parse json request body
+    
     //logger
     app.use(rateLimiterMiddleware);
     //cors

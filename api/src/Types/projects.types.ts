@@ -26,4 +26,5 @@ export interface UpdateProject {
     title?: string;
     description?: string;
     created_by?: number;
+    status?: string;
 }

@@ -14,19 +14,24 @@ export const getProject = async (id: number): Promise<Project> => {
   return project;
 };
 
-// Create new project
-export const createNewProject = async (project: NewProject): Promise<{ message: string; project: Project }> => {
-  if (!project.title) throw new Error("Project title is required");
-  const createdProject = await repo.createNewProject(project);
-  return { message: "Project created successfully", project: createdProject };
+
+
+export const createNewProject = async (
+    project: NewProject
+): Promise<{ message: string; project: Project }> => {
+    if (!project.title) throw new Error("Project title is required");
+
+    const createdProject = await repo.createNewProject(project);
+    return { message: "Project created successfully", project: createdProject };
 };
+
 
 // Update project
 export const updateProject = async (id: number, projectData: UpdateProject): Promise<{ message: string; project: Project }> => {
-  if (!projectData || Object.keys(projectData).length === 0) throw new Error("No data provided for update");
-  const updatedProject = await repo.updateProject(id, projectData);
-  if (!updatedProject) throw new Error("Project not found");
-  return { message: "Project updated successfully", project: updatedProject };
+    if (!projectData || Object.keys(projectData).length === 0) throw new Error("No data provided for update");
+    const updatedProject = await repo.updateProject(id, projectData);
+    if (!updatedProject) throw new Error("Project not found");
+    return { message: "Project updated successfully", project: updatedProject };
 };
 
 // Delete project
@@ -35,3 +40,13 @@ export const deleteProject = async (id: number): Promise<{ message: string; proj
   if (!deletedProject) throw new Error("Project not found");
   return { message: "Project deleted successfully", project: deletedProject };
 };
+
+const ProjectService = {
+  listProjects,
+  getProject,
+  createNewProject,
+  updateProject,
+  deleteProject,
+};
+
+export default ProjectService;

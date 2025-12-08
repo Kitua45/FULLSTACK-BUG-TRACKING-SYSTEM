@@ -12,9 +12,9 @@ export interface NewUser {
     first_name: string;
     last_name: string;
     email: string;
-    role_user: string;
     password_hash: string;
-    created_at: Date;
+    role_user?: string;   // backend sets it
+    created_at?: Date; 
 }
 
 // update user type

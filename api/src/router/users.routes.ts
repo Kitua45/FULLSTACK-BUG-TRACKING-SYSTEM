@@ -7,7 +7,7 @@ const userRoutes = (app: Express) => {
     app.get("/users",userController.getUsers);
 
     // Get a specific user by ID
-    app.get("/users/:id", allRoles, userController.getUserById);
+    app.get("/users/:id",  userController.getUserById);
 
     // Create a new user
     app.post("/users",  userController.createUser);
@@ -17,7 +17,7 @@ const userRoutes = (app: Express) => {
          userController.updateUser);
 
     // Delete a user
-    app.delete("/users/:id", adminOnly, userController.deleteUser);
+    app.delete("/users/:id",  userController.deleteUser);
 
     // Log in user 
     app.post('/login',userController.loginUser)

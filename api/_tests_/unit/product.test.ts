@@ -1,4 +1,4 @@
-import { product } from "../src/product"
+import { product } from "../../src/product"
 
 describe("Test jest ", () => {
     it("should return the product of 3 and 2 ", () => {

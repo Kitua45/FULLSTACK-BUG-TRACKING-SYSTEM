@@ -1,8 +1,8 @@
-import * as repo from "../src/Repositories/projects.repository";
-import { Project, NewProject, UpdateProject } from "../src/Types/projects.types";
-import * as projectService from "../src/services/project.service";
+import * as ProjectRepository from "../../src/Repositories/projects.repository";
+import { Project, NewProject, UpdateProject } from "../../src/Types/projects.types";
+import * as ProjectService from "../../src/services/project.service";
 
-jest.mock("../src/Repositories/projects.repository"); // Mock repository
+jest.mock("../../src/Repositories/projects.repository"); // Mock repository
 
 beforeEach(() => {
   jest.clearAllMocks(); // Reset mocks before each test
@@ -18,11 +18,11 @@ describe("Project Service Tests", () => {
       { projectid: 2, title: "Project B", description: "Desc B", created_by: 2, created_at: new Date() }
     ];
 
-    (repo.getAllProjects as jest.Mock).mockResolvedValue(mockProjects);
+    (ProjectRepository.getAllProjects as jest.Mock).mockResolvedValue(mockProjects);
 
-    const projects = await projectService.listProjects();
+    const projects = await ProjectService.listProjects();
     expect(projects).toEqual(mockProjects);
-    expect(repo.getAllProjects).toHaveBeenCalledTimes(1);
+    expect(ProjectRepository.getAllProjects).toHaveBeenCalledTimes(1);
   });
 
    
@@ -44,16 +44,16 @@ it("should create a new project successfully", async () => {
     created_at: newProject.created_at! // ! ensuring its not left null
   };
 
-  (repo.createNewProject as jest.Mock).mockResolvedValue(createdProject);
+  (ProjectRepository.createNewProject as jest.Mock).mockResolvedValue(createdProject);
 
-  const result = await projectService.createNewProject(newProject);
+  const result = await ProjectService.createNewProject(newProject);
   expect(result).toEqual({ message: "Project created successfully", project: createdProject });
-  expect(repo.createNewProject).toHaveBeenCalledWith(newProject);
+  expect(ProjectRepository.createNewProject).toHaveBeenCalledWith(newProject);
 });
 
 it("should throw error if project title is missing", async () => {
   const newProject = { title: "", description: "Desc", created_by: 1 } as NewProject;
-  await expect(projectService.createNewProject(newProject)).rejects.toThrow("Project title is required");
+  await expect(ProjectService.createNewProject(newProject)).rejects.toThrow("Project title is required");
 });
   // updateProject
   
@@ -61,27 +61,27 @@ it("should throw error if project title is missing", async () => {
     const updateData: UpdateProject = { title: "Updated Project" };
     const updatedProject: Project = { projectid: 1, title: "Updated Project", description: "Desc A", created_by: 1, created_at: new Date() };
 
-    (repo.updateProject as jest.Mock).mockResolvedValue(updatedProject);
+    (ProjectRepository.updateProject as jest.Mock).mockResolvedValue(updatedProject);
 
-    const result = await projectService.updateProject(1, updateData);
+    const result = await ProjectService.updateProject(1, updateData);
     expect(result).toEqual({ message: "Project updated successfully", project: updatedProject });
-    expect(repo.updateProject).toHaveBeenCalledWith(1, updateData);
+    expect(ProjectRepository.updateProject).toHaveBeenCalledWith(1, updateData);
   });
 
     // deleteProject
   
   it("should delete a project successfully", async () => {
     const deletedProject: Project = { projectid: 1, title: "Project A", description: "Desc A", created_by: 1, created_at: new Date() };
-    (repo.deleteProject as jest.Mock).mockResolvedValue(deletedProject);
+    (ProjectRepository.deleteProject as jest.Mock).mockResolvedValue(deletedProject);
 
-    const result = await projectService.deleteProject(1);
+    const result = await ProjectService.deleteProject(1);
     expect(result).toEqual({ message: "Project deleted successfully", project: deletedProject });
-    expect(repo.deleteProject).toHaveBeenCalledWith(1);
+    expect(ProjectRepository.deleteProject).toHaveBeenCalledWith(1);
   });
 
   it("should throw error if project to delete not found", async () => {
-    (repo.deleteProject as jest.Mock).mockResolvedValue(null);
-    await expect(projectService.deleteProject(999)).rejects.toThrow("Project not found");
+    (ProjectRepository.deleteProject as jest.Mock).mockResolvedValue(null);
+    await expect(ProjectService.deleteProject(999)).rejects.toThrow("Project not found");
   });
 
 

@@ -121,3 +121,18 @@ export const getUserByEmail = async (email: string): Promise<User | null> => {
         .query('SELECT * FROM Users WHERE email = @email');
     return result.recordset[0] || null;
 }
+
+const UserRepository = {
+  getUsers,
+  getUserById,
+  getActiveUsers,
+  emailExists,
+  createUser,
+  updateUser,
+  deleteUser,
+  setVerificationCode,
+  verifyUser,
+  getUserByEmail,
+};
+
+export default UserRepository;

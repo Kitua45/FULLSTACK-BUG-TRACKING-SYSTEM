@@ -1,16 +1,16 @@
-import * as userRepositories from "../src/Repositories/users.repository";
+import * as UserRepository from "../../src/Repositories/users.repository";
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
-import { sendEmail } from '../src/mailer/mailer';
-import { emailTemplate } from '../src/mailer/emailTemplates';
-import { userService } from '../src/services/user.service'; 
+import { sendEmail } from '../../src/mailer/mailer';
+import { emailTemplate } from '../../src/mailer/emailTemplates';
+import { userService } from '../../src/services/user.service'; 
 
 // mocking external dependencies
-jest.mock("../src/Repositories/users.repository");
+jest.mock("../../src/Repositories/users.repository");
 jest.mock("bcrypt");
 jest.mock("jsonwebtoken");
-jest.mock("../src/mailer/mailer");
-jest.mock("../src/mailer/emailTemplates");
+jest.mock("../../src/mailer/mailer");
+jest.mock("../../src/mailer/emailTemplates");
 
 // the describe blocks
 describe("User services Test suite", () => {
@@ -43,10 +43,10 @@ describe("User services Test suite", () => {
       }
     ];
 
-    (userRepositories.getUsers as jest.Mock).mockResolvedValue(mockUsers);
+    (UserRepository.getUsers as jest.Mock).mockResolvedValue(mockUsers);
     const users = await userService.listUsers();
     expect(users).toEqual(mockUsers);
-    expect(userRepositories.getUsers).toHaveBeenCalledTimes(1)
+    expect(UserRepository.getUsers).toHaveBeenCalledTimes(1)
   });
 
 });
@@ -63,8 +63,8 @@ it("should hash the password, save user, and send verification email", async () 
 
   // Mocking functions
   (bcrypt.hash as jest.Mock).mockResolvedValue(hashedPassword);
-  (userRepositories.createUser as jest.Mock).mockResolvedValue({ message: 'User created successfully' });
-  (userRepositories.setVerificationCode as jest.Mock).mockResolvedValue({});
+  (UserRepository.createUser as jest.Mock).mockResolvedValue({ message: 'User created successfully' });
+  (UserRepository.setVerificationCode as jest.Mock).mockResolvedValue({});
   (sendEmail as jest.Mock).mockResolvedValue(true);
   (emailTemplate.verify as jest.Mock).mockReturnValue("<p>Your verification code is 345678</p>");
 
@@ -73,7 +73,7 @@ it("should hash the password, save user, and send verification email", async () 
 
   expect(result).toEqual({ message: 'User created successfully. Verification code sent to email' });
   expect(bcrypt.hash).toHaveBeenCalledWith(newUser.password_hash, 10);
-  expect(userRepositories.createUser).toHaveBeenCalledWith(expect.objectContaining({
+  expect(UserRepository.createUser).toHaveBeenCalledWith(expect.objectContaining({
     ...newUser,
     password_hash: hashedPassword
   }));
@@ -95,7 +95,7 @@ it("should hash the password and update the user by ID", async () => {
 
   const hashedPassword = "newPassword123";
 
-  (userRepositories.getUserById as jest.Mock).mockResolvedValue({
+  (UserRepository.getUserById as jest.Mock).mockResolvedValue({
     userid: userId,
     first_name: "OldName",
     last_name: "OldLast",
@@ -103,7 +103,7 @@ it("should hash the password and update the user by ID", async () => {
   });
 
   (bcrypt.hash as jest.Mock).mockResolvedValue(hashedPassword);
-  (userRepositories.updateUser as jest.Mock).mockResolvedValue({
+  (UserRepository.updateUser as jest.Mock).mockResolvedValue({
     message: "User updated successfully"
   });
 
@@ -111,7 +111,7 @@ it("should hash the password and update the user by ID", async () => {
 
   expect(bcrypt.hash).toHaveBeenCalledTimes(1);
   expect(bcrypt.hash).toHaveBeenCalledWith(updateData.password_hash, 10);
-  expect(userRepositories.updateUser).toHaveBeenCalledWith(userId, expect.objectContaining({
+  expect(UserRepository.updateUser).toHaveBeenCalledWith(userId, expect.objectContaining({
     ...updateData,
     password_hash: hashedPassword
   }));

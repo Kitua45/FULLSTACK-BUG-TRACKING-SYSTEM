@@ -39,15 +39,22 @@ export const getProjectById = async (req: Request, res: Response) => {
 
 // CREATE NEW PROJECT
 
+
 export const createNewProject = async (req: Request, res: Response) => {
   const projectData = req.body;
 
   try {
     const result = await projectServices.createNewProject(projectData);
-    res.status(201).json(result);
+    return res.status(201).json(result); // return 201 Created
   } catch (error: any) {
-    console.error("Error creating project:", error);
-    res.status(500).json({ error: "Internal server error" });
+    console.error("Error creating project:", error.message || error);
+    
+    // Differentiate between validation errors and server errors
+    if (error.message && error.message.includes("required")) {
+      return res.status(400).json({ error: error.message });
+    }
+
+    return res.status(500).json({ error: "Internal server error" });
   }
 };
 
