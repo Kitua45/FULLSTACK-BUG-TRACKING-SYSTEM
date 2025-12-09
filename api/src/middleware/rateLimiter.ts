@@ -1,15 +1,24 @@
 import { RateLimiterMemory } from "rate-limiter-flexible";
 import { NextFunction, Request, Response } from 'express';
 
-
 export const rateLimiter = new RateLimiterMemory({
     points: 10, // 10 requests
     duration: 60, // per 60 seconds
 });
 
 export const rateLimiterMiddleware = async (req: Request, res: Response, next: NextFunction) => {
+    // Bypass rate limiter for local requests or test environment
+    if (
+        req.ip === '::1' || 
+        req.ip === '127.0.0.1' || 
+        req.ip === '::ffff:127.0.0.1' || 
+        process.env.NODE_ENV === 'test'
+    ) {
+        return next();
+    }
+
     try {
-        await rateLimiter.consume(req.ip || 'unknown'); // means consume 1 point per request from IP
+        await rateLimiter.consume(req.ip || 'unknown'); // consume 1 point per request from IP
         console.log(`Rate limit check passed for IP: ${req.ip}`);
         next();
     } catch (error) {

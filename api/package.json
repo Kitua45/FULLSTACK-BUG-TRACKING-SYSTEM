@@ -7,7 +7,8 @@
     "dev": "tsx watch src/server.ts",
     "build": "tsc",
     "start": "npm run build && node dist/index.js",
-    "test": "jest"
+    "test": "jest",
+    "stress:user": "k6 run ./load-tests/stress/user.get.stress.test.ts"
   },
   "keywords": [],
   "author": "",
@@ -19,6 +20,7 @@
     "@types/express": "^5.0.3",
     "@types/jest": "^30.0.0",
     "@types/jsonwebtoken": "^9.0.10",
+    "@types/k6": "^1.4.0",
     "@types/mssql": "^9.1.8",
     "@types/node": "^24.9.1",
     "@types/nodemailer": "^7.0.4",
