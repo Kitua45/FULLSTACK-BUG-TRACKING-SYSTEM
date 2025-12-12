@@ -37,7 +37,6 @@ export const Verification: React.FC = () => {
         navigate("/login");
       }, 2000);
     } catch (error) {
-      // Fully type-safe handling
       if (error instanceof Error) {
         toast.error(error.message);
       } else if (typeof error === "object" && error !== null && "data" in error) {
@@ -57,21 +56,21 @@ export const Verification: React.FC = () => {
     <>
       <Navbar />
       <div className="flex justify-center items-center min-h-screen bg-[#F0F9F0] relative overflow-hidden">
-        {/* Decorative circles */}
+
         <div className="absolute top-10 left-10 w-32 h-32 bg-[#2ABF24] rounded-full opacity-10"></div>
         <div className="absolute bottom-10 right-10 w-48 h-48 bg-[#148C0F] rounded-full opacity-10"></div>
 
-        {/* Form container */}
         <div className="relative w-full max-w-lg p-8 rounded-xl shadow-2xl bg-white/90 backdrop-blur-sm">
           <h1 className="text-3xl font-bold mb-6 text-center text-[#054003]">
             Verify your Account
           </h1>
+
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
             <input
               type="email"
               {...register("email")}
               placeholder="Email"
-              className="w-full p-2 rounded border border-[#148C0F] text-lg focus:outline-none focus:ring-2 focus:ring-[#2ABF24]"
+              className="w-full p-2 rounded border border-[#148C0F] text-lg focus:outline-none focus:ring-2 focus:ring-[#2ABF24] text-black placeholder:text-black"
             />
             {errors.email && (
               <span className="text-red-700 text-sm">{errors.email.message}</span>
@@ -81,7 +80,7 @@ export const Verification: React.FC = () => {
               type="number"
               {...register("code")}
               placeholder="Code"
-              className="w-full p-2 rounded border border-[#148C0F] text-lg focus:outline-none focus:ring-2 focus:ring-[#2ABF24]"
+              className="w-full p-2 rounded border border-[#148C0F] text-lg focus:outline-none focus:ring-2 focus:ring-[#2ABF24] text-black placeholder:text-black"
             />
             {errors.code && (
               <span className="text-red-700 text-sm">{errors.code.message}</span>
@@ -106,3 +105,4 @@ export const Verification: React.FC = () => {
     </>
   );
 };
+

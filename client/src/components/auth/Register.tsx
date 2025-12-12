@@ -66,7 +66,7 @@ export const Register: React.FC = () => {
                             type="text"
                             {...register("first_name")}
                             placeholder="First Name"
-                            className="w-full p-2 rounded border border-[#148C0F] text-lg focus:outline-none focus:ring-2 focus:ring-[#2ABF24]"
+                            className="w-full p-2 rounded border border-[#148C0F] text-lg focus:outline-none focus:ring-2 focus:ring-[#2ABF24] text-black placeholder:text-black"
                         />
                         {errors.first_name && <span className="text-red-700 text-sm">{errors.first_name.message}</span>}
 
@@ -74,7 +74,7 @@ export const Register: React.FC = () => {
                             type="text"
                             {...register("last_name")}
                             placeholder="Last Name"
-                            className="w-full p-2 rounded border border-[#148C0F] text-lg focus:outline-none focus:ring-2 focus:ring-[#2ABF24]"
+                            className="w-full p-2 rounded border border-[#148C0F] text-lg focus:outline-none focus:ring-2 focus:ring-[#2ABF24] text-black placeholder:text-black"
                         />
                         {errors.last_name && <span className="text-red-700 text-sm">{errors.last_name.message}</span>}
 
@@ -82,7 +82,7 @@ export const Register: React.FC = () => {
                             type="email"
                             {...register("email")}
                             placeholder="Email"
-                            className="w-full p-2 rounded border border-[#148C0F] text-lg focus:outline-none focus:ring-2 focus:ring-[#2ABF24]"
+                            className="w-full p-2 rounded border border-[#148C0F] text-lg focus:outline-none focus:ring-2 focus:ring-[#2ABF24] text-black placeholder:text-black"
                         />
                         {errors.email && <span className="text-red-700 text-sm">{errors.email.message}</span>}
 
@@ -90,7 +90,7 @@ export const Register: React.FC = () => {
                             type="password"
                             {...register("password_hash")}
                             placeholder="Password"
-                            className="w-full p-2 rounded border border-[#148C0F] text-lg focus:outline-none focus:ring-2 focus:ring-[#2ABF24]"
+                            className="w-full p-2 rounded border border-[#148C0F] text-lg focus:outline-none focus:ring-2 focus:ring-[#2ABF24] text-black placeholder:text-black"
                         />
                         {errors.password_hash && <span className="text-red-700 text-sm">{errors.password_hash.message}</span>}
 
@@ -98,7 +98,7 @@ export const Register: React.FC = () => {
                             type="password"
                             {...register("confirmPassword")}
                             placeholder="Confirm Password"
-                            className="w-full p-2 rounded border border-[#148C0F] text-lg focus:outline-none focus:ring-2 focus:ring-[#2ABF24]"
+                            className="w-full p-2 rounded border border-[#148C0F] text-lg focus:outline-none focus:ring-2 focus:ring-[#2ABF24] text-black placeholder:text-black"
                         />
                         {errors.confirmPassword && <span className="text-red-700 text-sm">{errors.confirmPassword.message}</span>}
 

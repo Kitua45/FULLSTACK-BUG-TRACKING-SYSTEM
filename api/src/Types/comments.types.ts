@@ -3,6 +3,7 @@ export interface Comment {
   bugid: number;
   userid: number;
   content: string;
+  first_name: string;
   timestamp?: Date;
 }
 

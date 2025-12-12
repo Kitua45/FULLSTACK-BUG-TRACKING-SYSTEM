@@ -1,39 +1,60 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 
-//either a user is logged in or logout
-export type UserState = {
-    token: string | null;
-    user: {
-        userid: number;
-        first_name: string;
-        last_name: string;
-        email: string;
-        
-        role: string;
-    } | null;
+
+// User state type
+export interface User {
+  userid: number;
+  first_name: string;
+  last_name: string;
+  email: string;
+  role: string;
+  avatar?: string;      // optional, can be generated locally
+  created_at?: string;  // optional
 }
 
-//no user in the system
+export interface UserState {
+  token: string | null;
+  user: User | null;
+}
+
+
+// Initial state
+
 const initialState: UserState = {
-    token: null,
-    user: null
-}
-
-const userSlice = createSlice({ // createSlice is a function that creates a slice of the Redux store- a slice in simple terms is a part of the store that contains a specific piece of state and the reducers that update that state.
-    name: 'user',
-    initialState,
-    reducers: { //a reducer is a function that takes the current state and an action, and returns a new state
-        loginSuccess: (state, action) => {
-            state.token = action.payload.token; // the token is set when the user logs in successfully
-            state.user = action.payload.user // the user is set when the user logs in successfully
-        },
-        logOut: (state) => {
-            state.token = null;
-            state.user = null;
-        }
-    }
-})
+  token: null,
+  user: null,
+};
 
 
-export const { loginSuccess, logOut } = userSlice.actions
-export default userSlice.reducer
+// Slice
+
+const userSlice = createSlice({
+  name: "user",
+  initialState,
+  reducers: {
+    // Login
+    loginSuccess: (state, action: PayloadAction<{ token: string; user: User }>) => {
+      state.token = action.payload.token;
+      state.user = action.payload.user;
+    },
+
+    //  Logout
+    logOut: (state) => {
+      state.token = null;
+      state.user = null;
+    },
+
+    //  Update user info locally
+    updateUser: (state, action: PayloadAction<Partial<User>>) => {
+      if (state.user) {
+        state.user = { ...state.user, ...action.payload };
+      }
+    },
+  },
+});
+
+
+// Exports
+
+export const { loginSuccess, logOut, updateUser } = userSlice.actions;
+export default userSlice.reducer;

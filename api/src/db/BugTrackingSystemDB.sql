@@ -13,6 +13,37 @@ CREATE TABLE Users (
     is_verified BIT NOT NULL DEFAULT 0
 );
 
+SELECT 
+    dc.name AS DefaultConstraintName
+FROM sys.default_constraints dc
+INNER JOIN sys.columns c 
+    ON c.default_object_id = dc.object_id
+INNER JOIN sys.tables t 
+    ON t.object_id = c.object_id
+WHERE t.name = 'Users'
+  AND c.name = 'role_user';
+
+ALTER TABLE Users
+DROP CONSTRAINT DF__Users__role_user__42E1EEFE;
+INSERT INTO Users (first_name, last_name, email, password_hash, role_user)
+VALUES (
+    'Grace',
+    'Mumbua',
+    'gracemumbua@gmail.com',
+    '$2b$12$Go5zuvGfwjshEUF/hNKAOeqA/L6hjrSSj2IEPZgUGBZNTXpxZn0HK',
+    'admin'
+);
+
+
+ALTER TABLE Users
+ADD CONSTRAINT DF_Users_role_user DEFAULT 'user' FOR role_user;
+
+
+
+
+
+
+
 
 CREATE TABLE Projects (
     projectid INT IDENTITY(1,1) PRIMARY KEY,

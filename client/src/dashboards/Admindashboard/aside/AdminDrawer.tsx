@@ -23,10 +23,7 @@ export const AdminDrawer = () => {
                                 transition-all duration-200
                             "
                         >
-                            {/* Icon */}
-                            <span className="text-2xl text-[#2ABF24]">
-                                {item.icon}
-                            </span>
+                            
 
                             {/* Name */}
                             <span className="text-lg font-medium">

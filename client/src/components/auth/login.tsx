@@ -70,7 +70,7 @@ export const Login: React.FC = () => {
               type="email"
               {...register("email")}
               placeholder="Email"
-              className="w-full p-3 rounded border border-[#148C0F] text-lg focus:outline-none focus:ring-2 focus:ring-[#2ABF24] transition-all"
+              className="w-full p-3 rounded border border-[#148C0F] text-lg focus:outline-none focus:ring-2 focus:ring-[#2ABF24] transition-all text-black placeholder:text-black"
             />
             {errors.email && <span className="text-red-700 text-sm">{errors.email.message}</span>}
 
@@ -78,7 +78,7 @@ export const Login: React.FC = () => {
               type="password"
               {...register("password")}
               placeholder="Password"
-              className="w-full p-3 rounded border border-[#148C0F] text-lg focus:outline-none focus:ring-2 focus:ring-[#2ABF24] transition-all"
+              className="w-full p-3 rounded border border-[#148C0F] text-lg focus:outline-none focus:ring-2 focus:ring-[#2ABF24] transition-all text-black placeholder:text-black"
             />
             {errors.password && <span className="text-red-700 text-sm">{errors.password.message}</span>}
 

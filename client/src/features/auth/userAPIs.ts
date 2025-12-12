@@ -1,4 +1,3 @@
-
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 import { ApiDomain } from "../../utils/ApiDomain";
@@ -19,8 +18,8 @@ export type TUser = {
 
 // User creation
 
-export const usersAPI = createApi({ // sets up API endpoints for user management - creating users and verifying them etc
-    reducerPath: 'usersAPI', //this is the key in the store where the API state will be stored - name of the API in the store
+export const usersAPI = createApi({
+    reducerPath: 'usersAPI',
     baseQuery: fetchBaseQuery({
         baseUrl: ApiDomain
     }),
@@ -32,7 +31,7 @@ export const usersAPI = createApi({ // sets up API endpoints for user management
                 method: 'POST',
                 body: newUser
             }),
-            invalidatesTags: ['Users'] // invalidates the cache for the Users tag when a new user is created
+            invalidatesTags: ['Users']
         }),
         verifyUser: builder.mutation<{ message: string }, { email: string, code: string }>({
             query: (data) => ({
@@ -66,7 +65,29 @@ export const usersAPI = createApi({ // sets up API endpoints for user management
             query: (id) => `/users/${id}`,
         }),
 
-
+        // ✅ NEW MUTATION ADDED HERE
+        updateUser: builder.mutation<TUser, Partial<TUser> & { id: number }>({
+            query: (user) => ({
+                url: `/users/${user.id}`,
+                method: 'PUT',
+                body: user
+            }),
+            invalidatesTags: ['Users']
+        }),
 
     })
 })
+
+
+
+export const {
+    useCreateUsersMutation,
+    useVerifyUserMutation,
+    useGetUsersQuery,
+    useUpdateUserRoleMutation,
+    useUpdateUserProfileMutation,
+    useGetUserByIdQuery,
+
+
+    useUpdateUserMutation
+} = usersAPI;

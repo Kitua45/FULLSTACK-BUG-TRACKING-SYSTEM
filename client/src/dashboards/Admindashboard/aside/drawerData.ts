@@ -19,9 +19,11 @@ export const AdminDrawerData = [
     name: "Analytics",
     link: "analytics",
   },
-  {
-    id: "profile",
-    name: "Profile",
-    link: "profile",
+ 
+
+   {
+    id: "comments",
+    name: "Comments",
+    link: "comments",
   },
 ];

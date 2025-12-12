@@ -11,7 +11,7 @@ app.get("/comments", commentController.getAllComments);
 app.get("/comments/bug/:bugid", commentController.getCommentsByBugId);
 
 // Create a comment
-app.post("/comments", commentController.createComment);
+app.post("/comments", commentController.createComment);                    
 
 // Update a comment
 app.put("/comments/:id", commentController.updateComment);

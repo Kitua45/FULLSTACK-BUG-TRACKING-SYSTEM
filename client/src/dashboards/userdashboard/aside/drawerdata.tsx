@@ -11,8 +11,8 @@ export const userDrawerData = [
   },
 
   {
-    id: "profile",
-    name: "Profile",
-    link: "profile",
+    id: "comments",
+    name: "Comments",
+    link: "Comments",
   },
 ];

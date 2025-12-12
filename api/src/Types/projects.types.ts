@@ -18,8 +18,10 @@ export interface NewProject {
   description?: string;
   created_by: number;
   created_at?: Date;
-  members?: ProjectMember[]; 
+  status?: "active" | "inactive";  // optional status
+  members?: ProjectMember[];
 }
+
 
 // Type for updating an existing project
 export interface UpdateProject {
