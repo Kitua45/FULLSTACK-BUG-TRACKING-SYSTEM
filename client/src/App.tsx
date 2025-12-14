@@ -20,7 +20,8 @@ import Comments from "./dashboards/Admindashboard/content/comments/comment"
 import Comment from "./dashboards/userdashboard/content/Comments"
 import { CreateBugModal } from "./dashboards/userdashboard/content/bugs/reportbug"
 
-import { CreateProject } from './dashboards/Admindashboard/content/project/createproject'
+import { CreateProject } from "./dashboards/Admindashboard/content/project/createproject";
+
 import  { useSelector } from 'react-redux'
 import type { RootState } from './app/store'
 

@@ -36,13 +36,13 @@ describe("User services Test suite", () => {
 
   it("should hash the password, save user, and send verification email", async () => {
     const newUser = {
-      first_name: "Nicholas",
-      last_name: "Wamuthende",
-      email: "wamuthende345@gmail.com",
-      password_hash: "amuthende45"
+      first_name: "Bernad",
+      last_name: "Kinyua",
+      email: "bernad345@gmail.com",
+      password_hash: "bernard45"
     };
 
-    const hashedPassword = "amuthende45";
+    const hashedPassword = "bernard45";
 
     // Mocking functions
     (bcrypt.hash as jest.Mock).mockResolvedValue(hashedPassword);
@@ -65,8 +65,8 @@ describe("User services Test suite", () => {
   it("should hash the password and update the user by ID", async () => {
     const userId = 1;
     const updateData = {
-      first_name: "Nicholas",
-      last_name: "Wamuthende",
+      first_name: "Bernard",
+      last_name: "Kinyua",
       password_hash: "newPassword123"
     };
 
@@ -74,9 +74,9 @@ describe("User services Test suite", () => {
 
     (UserRepository.getUserById as jest.Mock).mockResolvedValue({
       userid: userId,
-      first_name: "OldName",
-      last_name: "OldLast",
-      password_hash: "oldHash"
+      first_name: "Bernard",
+      last_name: "Kinyua",
+      password_hash: "bernard45"
     });
 
     (bcrypt.hash as jest.Mock).mockResolvedValue(hashedPassword);

@@ -1,4 +1,3 @@
-import { motion } from "framer-motion";
 import Navbar from "../components/Nav/navbar";
 import { Bug, BarChart2, Users, Globe, CheckCircle } from "lucide-react";
 
@@ -49,34 +48,21 @@ export default function Services() {
       {/* HERO SECTION */}
       <section className="pt-28 pb-20 px-6 md:px-12 text-center relative">
         <div className="absolute inset-0 bg-[#054003]/5 -z-10"></div>
-        <motion.h1
-          className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight mb-6"
-          initial={{ opacity: 0, y: 40 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-        >
+        <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight mb-6">
           Our Services
-        </motion.h1>
-        <motion.p
-          className="text-gray-700 text-lg md:text-xl max-w-3xl mx-auto"
-          initial={{ opacity: 0, y: 40 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.2, duration: 0.8 }}
-        >
+        </h1>
+        <p className="text-gray-700 text-lg md:text-xl max-w-3xl mx-auto">
           BugTracker offers a variety of tools and features to help teams deliver
           high-quality software faster and more efficiently.
-        </motion.p>
+        </p>
       </section>
 
       {/* SERVICES GRID */}
       <section className="max-w-6xl mx-auto py-20 px-6 md:px-12 grid sm:grid-cols-2 lg:grid-cols-3 gap-10">
-        {services.map((service, idx) => (
-          <motion.div
+        {services.map((service) => (
+          <div
             key={service.title}
             className="bg-white p-6 rounded-xl shadow-lg hover:shadow-2xl transition flex flex-col items-start"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ delay: idx * 0.1, duration: 0.8 }}
           >
             <div
               className={`w-12 h-12 flex items-center justify-center rounded-full mb-4 ${service.color}`}
@@ -87,7 +73,7 @@ export default function Services() {
               {service.title}
             </h3>
             <p className="text-gray-700">{service.description}</p>
-          </motion.div>
+          </div>
         ))}
       </section>
     </div>

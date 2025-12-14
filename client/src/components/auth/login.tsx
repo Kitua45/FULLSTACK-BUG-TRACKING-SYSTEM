@@ -15,8 +15,16 @@ type LoginInputs = {
 };
 
 const schema = yup.object({
-  email: yup.string().email("Invalid email").max(100, "Max 100 characters").required("Email is required"),
-  password: yup.string().min(6, "Min 6 characters").max(20, "Max 20 characters").required("Password is required"),
+  email: yup
+    .string()
+    .email("Invalid email")
+    .max(100, "Max 100 characters")
+    .required("Email is required"),
+  password: yup
+    .string()
+    .min(6, "Min 6 characters")
+    .max(20, "Max 20 characters")
+    .required("Password is required"),
 });
 
 export const Login: React.FC = () => {
@@ -24,7 +32,11 @@ export const Login: React.FC = () => {
   const navigate = useNavigate();
   const [loginUser, { isLoading }] = loginAPI.useLoginUserMutation();
 
-  const { register, handleSubmit, formState: { errors } } = useForm<LoginInputs>({
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<LoginInputs>({
     resolver: yupResolver(schema),
   });
 
@@ -32,7 +44,6 @@ export const Login: React.FC = () => {
     try {
       const response = await loginUser(data).unwrap();
       toast.success(response.message);
-      console.log(response);
 
       dispatch(loginSuccess(response));
 
@@ -44,7 +55,11 @@ export const Login: React.FC = () => {
     } catch (error) {
       if (error instanceof Error) {
         toast.error(error.message);
-      } else if (typeof error === "object" && error !== null && "data" in error) {
+      } else if (
+        typeof error === "object" &&
+        error !== null &&
+        "data" in error
+      ) {
         const e = error as { data?: { error?: string } };
         toast.error(e.data?.error || "An unexpected error occurred");
       } else {
@@ -64,36 +79,51 @@ export const Login: React.FC = () => {
 
         {/* Form container */}
         <div className="relative w-full max-w-lg p-8 rounded-xl shadow-2xl bg-white/90 backdrop-blur-sm">
-          <h1 className="text-3xl font-bold mb-6 text-center text-[#054003]">Login</h1>
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+          <h1
+            className="text-3xl font-bold mb-6 text-center text-[#054003]"
+            data-test="login-title"
+          >
+            Login
+          </h1>
+
+          <form
+            onSubmit={handleSubmit(onSubmit)}
+            className="space-y-4"
+            data-test="login-form"
+          >
             <input
               type="email"
               {...register("email")}
               placeholder="Email"
-              className="w-full p-3 rounded border border-[#148C0F] text-lg focus:outline-none focus:ring-2 focus:ring-[#2ABF24] transition-all text-black placeholder:text-black"
+              data-test="login-email"
+              className="w-full p-3 rounded border border-[#148C0F] text-lg text-black"
             />
-            {errors.email && <span className="text-red-700 text-sm">{errors.email.message}</span>}
+            {errors.email && (
+              <span className="text-red-700 text-sm">
+                {errors.email.message}
+              </span>
+            )}
 
             <input
               type="password"
               {...register("password")}
               placeholder="Password"
-              className="w-full p-3 rounded border border-[#148C0F] text-lg focus:outline-none focus:ring-2 focus:ring-[#2ABF24] transition-all text-black placeholder:text-black"
+              data-test="login-password"
+              className="w-full p-3 rounded border border-[#148C0F] text-lg text-black"
             />
-            {errors.password && <span className="text-red-700 text-sm">{errors.password.message}</span>}
+            {errors.password && (
+              <span className="text-red-700 text-sm">
+                {errors.password.message}
+              </span>
+            )}
 
             <button
               type="submit"
               disabled={isLoading}
-              className="w-full py-3 mt-4 rounded bg-[#148C0F] text-white hover:bg-[#2ABF24] disabled:opacity-70 flex justify-center items-center font-semibold transition-colors"
+              data-test="login-submit"
+              className="w-full py-3 mt-4 rounded bg-[#148C0F] text-white hover:bg-[#2ABF24] disabled:opacity-70 flex justify-center items-center font-semibold"
             >
-              {isLoading ? (
-                <>
-                  <span className="loading loading-spinner mr-2" /> please wait ...
-                </>
-              ) : (
-                "Login"
-              )}
+              {isLoading ? "Please wait..." : "Login"}
             </button>
           </form>
         </div>

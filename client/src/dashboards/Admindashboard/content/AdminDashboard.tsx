@@ -13,19 +13,27 @@ const AdminDashboard = () => {
   };
 
   return (
-    <div>
+    <div data-test="admin-dashboard">
       <Navbar />
 
       {/* Top bar BELOW NAVBAR */}
-      <div className="flex px-4 py-4 bg-[#054003] items-center mt-[64px] lg:mt-[72px]">
+      <div
+        className="flex px-4 py-4 bg-[#054003] items-center mt-[64px] lg:mt-[72px]"
+        data-test="admin-topbar"
+      >
         <button
           className="mr-4 text-white text-2xl lg:hidden"
           onClick={handleDrawerToggle}
+          data-test="admin-drawer-toggle"
+          aria-label="Toggle sidebar"
         >
           {drawerOpen ? <IoMdClose /> : <FaBars />}
         </button>
 
-        <span className="text-white text-lg font-semibold">
+        <span
+          className="text-white text-lg font-semibold"
+          data-test="admin-welcome-text"
+        >
           Welcome to your Admin dashboard
         </span>
       </div>
@@ -39,21 +47,27 @@ const AdminDashboard = () => {
             lg:static lg:block lg:w-64 lg:top-0
           `}
           style={{ minHeight: "100vh" }}
+          data-test="admin-sidebar"
         >
           <div>
             {/* close button on mobile */}
             <button
               className="absolute top-4 right-4 text-white text-4xl lg:hidden"
               onClick={handleDrawerToggle}
+              aria-label="Close sidebar"
+              data-test="admin-sidebar-close"
             >
               <IoMdClose />
             </button>
-            <AdminDrawer />
+            <AdminDrawer data-test="admin-drawer-items" />
           </div>
         </aside>
 
         {/* Main content */}
-        <main className="flex-1 bg-[#E6F4E8] min-h-screen p-4">
+        <main
+          className="flex-1 bg-[#E6F4E8] min-h-screen p-4"
+          data-test="admin-main-content"
+        >
           <Outlet />
         </main>
       </div>
@@ -62,6 +76,7 @@ const AdminDashboard = () => {
 };
 
 export default AdminDashboard;
+
 
 
 

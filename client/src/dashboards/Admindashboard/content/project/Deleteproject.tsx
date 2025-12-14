@@ -32,15 +32,16 @@ export function DeleteProject({ projectId }: DeleteProjectProps) {
   };
 
   return (
-    <dialog id="delete-project-modal" className="modal">
+    <dialog id="delete-project-modal" className="modal" data-test="delete-project-modal">
       <div className="modal-box bg-gray-600 text-white rounded-lg">
-        <h3 className="text-lg font-bold">Confirm Delete</h3>
-        <p>Are you sure you want to delete this project?</p>
+        <h3 className="text-lg font-bold" data-test="delete-project-title">Confirm Delete</h3>
+        <p data-test="delete-project-message">Are you sure you want to delete this project?</p>
         <div className="modal-action">
           <button
             className="btn btn-error"
             onClick={handleDelete}
             disabled={isLoading}
+            data-test="delete-project-confirm-button"
           >
             {isLoading ? "Deleting..." : "Delete"}
           </button>
@@ -49,6 +50,7 @@ export function DeleteProject({ projectId }: DeleteProjectProps) {
             onClick={() =>
               (document.getElementById("delete-project-modal") as HTMLDialogElement)?.close()
             }
+            data-test="delete-project-cancel-button"
           >
             Cancel
           </button>

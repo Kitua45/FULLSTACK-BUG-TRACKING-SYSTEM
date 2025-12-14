@@ -4,10 +4,10 @@ import * as yup from "yup";
 import { projectsAPI } from "../../../../features/projects/projectAPI";
 import { toast } from "sonner";
 
-export type CreateProject = {
+export type CreateProjectInputs = {
   title: string;
   description: string;
-  status: "active" | "inactive";   
+  status: "active" | "inactive";
   created_by: number;
 };
 
@@ -32,20 +32,21 @@ const schema = yup.object({
 });
 
 export const CreateProject = () => {
-  const [createProject, { isLoading }] = projectsAPI.useCreateProjectMutation();
+  const [createProject, { isLoading }] =
+    projectsAPI.useCreateProjectMutation();
 
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<CreateProject>({
+  } = useForm<CreateProjectInputs>({
     resolver: yupResolver(schema),
   });
 
-  const onSubmit: SubmitHandler<CreateProject> = async (data) => {
+  const onSubmit: SubmitHandler<CreateProjectInputs> = async (data) => {
     try {
-      const response = await createProject(data).unwrap();
-      toast.success(response.message);
+      await createProject(data).unwrap();
+      toast.success("Project created successfully!");
       (document.getElementById("create-project") as HTMLDialogElement)?.close();
     } catch (error) {
       console.error("Error creating project:", error);
@@ -54,54 +55,81 @@ export const CreateProject = () => {
   };
 
   return (
-    <dialog id="create-project" className="modal sm:modal-middle">
-      <div className="modal-box bg-green-600 text-black w-full max-w-xs sm:max-w-lg mx-auto rounded-lg">
-        <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
+    <dialog
+      id="create-project"
+      className="modal sm:modal-middle"
+      data-test="create-project-modal"
+    >
+      <div
+        className="modal-box bg-green-600 text-black w-full max-w-xs sm:max-w-lg mx-auto rounded-lg"
+        data-test="create-project-box"
+      >
+        <form
+          onSubmit={handleSubmit(onSubmit)}
+          className="flex flex-col gap-4"
+          data-test="create-project-form"
+        >
+          {/* Project Title */}
           <input
             type="text"
             {...register("title")}
             placeholder="Project Title"
+            data-test="create-project-title"
             className="input rounded w-full p-2 text-lg bg-green-100 text-black"
           />
           {errors.title && (
-            <span className="text-sm text-red-700">{errors.title.message}</span>
+            <span className="text-sm text-red-700" data-test="error-title">
+              {errors.title.message}
+            </span>
           )}
 
+          {/* Description */}
           <textarea
             {...register("description")}
             placeholder="Project Description"
+            data-test="create-project-description"
             className="textarea rounded w-full p-2 text-lg bg-green-100 text-black"
           />
           {errors.description && (
-            <span className="text-sm text-red-700">{errors.description.message}</span>
+            <span className="text-sm text-red-700" data-test="error-description">
+              {errors.description.message}
+            </span>
           )}
 
+          {/* Status */}
           <select
             {...register("status")}
+            data-test="create-project-status"
             className="select rounded w-full p-2 text-lg bg-green-100 text-black"
-            onChange={(e) => e.target.value as "active" | "inactive"}
           >
             <option value="">Select Status</option>
             <option value="active">Active</option>
             <option value="inactive">Inactive</option>
           </select>
           {errors.status && (
-            <span className="text-sm text-red-700">{errors.status.message}</span>
+            <span className="text-sm text-red-700" data-test="error-status">
+              {errors.status.message}
+            </span>
           )}
 
+          {/* Created By */}
           <input
             type="number"
             {...register("created_by")}
             placeholder="Created By (User ID)"
+            data-test="create-project-created-by"
             className="input rounded w-full p-2 text-lg bg-green-100 text-black"
           />
           {errors.created_by && (
-            <span className="text-sm text-red-700">{errors.created_by.message}</span>
+            <span className="text-sm text-red-700" data-test="error-created-by">
+              {errors.created_by.message}
+            </span>
           )}
 
           <div className="modal-action flex justify-between">
             <button
               type="submit"
+              data-test="create-project-submit"
               className="btn bg-green-700 hover:bg-green-800 text-black"
               disabled={isLoading}
             >
@@ -115,8 +143,9 @@ export const CreateProject = () => {
             </button>
 
             <button
-              className="btn bg-green-300 hover:bg-green-400 text-black"
               type="button"
+              data-test="create-project-close"
+              className="btn bg-green-300 hover:bg-green-400 text-black"
               onClick={() =>
                 (document.getElementById("create-project") as HTMLDialogElement)?.close()
               }

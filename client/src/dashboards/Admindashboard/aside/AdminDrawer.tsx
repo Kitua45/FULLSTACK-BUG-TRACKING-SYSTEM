@@ -22,9 +22,8 @@ export const AdminDrawer = () => {
                                 hover:bg-[#0A5C04] 
                                 transition-all duration-200
                             "
+                            data-test={`sidebar-${item.id}-link`}
                         >
-                            
-
                             {/* Name */}
                             <span className="text-lg font-medium">
                                 {item.name}

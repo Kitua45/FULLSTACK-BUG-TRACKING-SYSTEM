@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { projectsAPI, type TProject } from "../../../../features/projects/projectAPI";
 import { toast } from "sonner";
 
@@ -10,20 +10,24 @@ export function UpdateProject({ project }: Props) {
   const [form, setForm] = useState({
     title: "",
     description: "",
-    status: "active", // default status
+    status: "active" as "active" | "inactive", // type fixed
   });
+
+  const hasInitialized = useRef(false); // avoid cascading renders
 
   const [updateProject, { isLoading }] = projectsAPI.useUpdateProjectMutation();
 
-  // Fill form when project changes
+  // Initialize form only once when project changes
   useEffect(() => {
-    if (!project) return;
+    if (!project || hasInitialized.current) return;
 
     setForm({
       title: project.title || "",
       description: project.description || "",
-      status: project.status === "inactive" ? "inactive" : "active", // only active/inactive
+      status: project.status === "inactive" ? "inactive" : "active",
     });
+
+    hasInitialized.current = true;
   }, [project]);
 
   // Handle input changes
@@ -38,10 +42,10 @@ export function UpdateProject({ project }: Props) {
     if (!project) return;
 
     const payload = {
-      id: project.projectid, // backend expects 'id'
+      id: project.projectid,
       title: form.title,
       description: form.description,
-      status: form.status === "inactive" ? "inactive" : "active",
+      status: form.status as "active" | "inactive", // type cast
     };
 
     try {
@@ -55,9 +59,9 @@ export function UpdateProject({ project }: Props) {
   };
 
   return (
-    <dialog id="update-project-modal" className="modal" key={project?.projectid}>
+    <dialog id="update-project-modal" className="modal" key={project?.projectid} data-test="update-project-modal">
       <div className="modal-box border border-green-400 shadow-lg">
-        <h3 className="font-bold text-xl text-green-700 mb-3">Update Project</h3>
+        <h3 className="font-bold text-xl text-green-700 mb-3" data-test="update-project-title">Update Project</h3>
 
         {/* Title */}
         <label className="label">
@@ -69,6 +73,7 @@ export function UpdateProject({ project }: Props) {
           className="input input-bordered w-full border-green-400"
           value={form.title}
           onChange={handleChange}
+          data-test="update-project-input-title"
         />
 
         {/* Description */}
@@ -80,6 +85,7 @@ export function UpdateProject({ project }: Props) {
           className="textarea textarea-bordered w-full border-green-400"
           value={form.description}
           onChange={handleChange}
+          data-test="update-project-input-description"
         />
 
         {/* Status */}
@@ -91,6 +97,7 @@ export function UpdateProject({ project }: Props) {
           className="select select-bordered w-full border-green-400"
           value={form.status}
           onChange={handleChange}
+          data-test="update-project-select-status"
         >
           <option value="active">Active</option>
           <option value="inactive">Inactive</option>
@@ -102,6 +109,7 @@ export function UpdateProject({ project }: Props) {
             className="btn bg-green-600 text-white hover:bg-green-700 border border-green-500"
             disabled={isLoading}
             onClick={handleSubmit}
+            data-test="update-project-submit"
           >
             {isLoading ? "Updating..." : "Update"}
           </button>
@@ -111,6 +119,7 @@ export function UpdateProject({ project }: Props) {
             onClick={() =>
               (document.getElementById("update-project-modal") as HTMLDialogElement)?.close()
             }
+            data-test="update-project-cancel"
           >
             Cancel
           </button>
