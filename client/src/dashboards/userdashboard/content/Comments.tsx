@@ -22,7 +22,6 @@ export default function Comment() {
 
   const [content, setContent] = useState("");
   const [bugid, setBugid] = useState<number | "">("");
-
   const [openModal, setOpenModal] = useState(false);
 
   const [createComment, { isLoading: creating }] = useCreateCommentMutation();
@@ -75,7 +74,7 @@ export default function Comment() {
   };
 
   if (isLoading)
-    return <p className="text-center text-gray-500">Loading comments...</p>;
+    return <p data-test="loading-comments" className="text-center text-gray-500">Loading comments...</p>;
 
   return (
     <div className="mt-6 p-4 bg-white rounded-xl shadow-md border border-gray-200 max-w-4xl mx-auto">
@@ -83,6 +82,7 @@ export default function Comment() {
 
       {/* Add Comment Button */}
       <button
+        data-test="add-comment-button"
         onClick={() => setOpenModal(true)}
         className="btn bg-green-700 text-white hover:bg-green-800 mb-4"
       >
@@ -98,28 +98,35 @@ export default function Comment() {
             return (
               <div
                 key={c.commentid}
+                data-test={`comment-item-${c.commentid}`}
                 className={`flex items-start gap-2 ${
                   isMe ? "justify-end flex-row-reverse" : "justify-start"
                 }`}
               >
                 {/* Avatar */}
-                <div className="w-10 h-10 rounded-full bg-green-600 flex items-center justify-center text-white font-bold">
+                <div
+                  data-test={`comment-avatar-${c.commentid}`}
+                  className="w-10 h-10 rounded-full bg-green-600 flex items-center justify-center text-white font-bold"
+                >
                   {c.first_name?.charAt(0)?.toUpperCase() || "U"}
                 </div>
 
                 {/* Message bubble */}
                 <div
+                  data-test={`comment-content-${c.commentid}`}
                   className={`flex flex-col p-3 rounded-xl shadow-sm max-w-lg border ${
                     isMe
                       ? "bg-green-100 text-black border-green-300"
                       : "bg-green-50 text-black border-green-200"
                   }`}
                 >
-                  <p className="font-semibold text-sm text-green-800">
+                  <p
+                    data-test={`comment-name-${c.commentid}`}
+                    className="font-semibold text-sm text-green-800"
+                  >
                     {c.first_name}
                   </p>
-
-                  <p className="mt-1">{c.content}</p>
+                  <p>{c.content}</p>
 
                   {c.timestamp && (
                     <span className="text-xs text-gray-500 mt-1">
@@ -128,9 +135,10 @@ export default function Comment() {
                   )}
                 </div>
 
-                {/* Delete for admin */}
-                {user.role === "admin" && (
+                {/* Delete button for admin OR comment owner */}
+                {(user.role === "admin" || isMe) && (
                   <button
+                    data-test={`delete-comment-${c.commentid}`}
                     onClick={() => handleDelete(c.commentid)}
                     className="btn btn-sm btn-error self-start"
                   >
@@ -141,7 +149,9 @@ export default function Comment() {
             );
           })
         ) : (
-          <p className="text-gray-600 text-center">No comments yet.</p>
+          <p data-test="no-comments" className="text-gray-600 text-center">
+            No comments yet.
+          </p>
         )}
 
         <div ref={commentsEndRef} />
@@ -149,7 +159,10 @@ export default function Comment() {
 
       {/* MODAL FORM */}
       {openModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
+        <div
+          data-test="add-comment-modal"
+          className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50"
+        >
           <div className="bg-white p-6 rounded-xl shadow-lg w-full max-w-md border border-gray-300">
             <h3 className="text-xl font-semibold text-green-900 mb-4">
               Add Comment
@@ -161,6 +174,7 @@ export default function Comment() {
                 Bug ID <span className="text-red-500">*</span>
               </label>
               <input
+                data-test="bugid-input"
                 type="number"
                 value={bugid}
                 onChange={(e) => {
@@ -178,6 +192,7 @@ export default function Comment() {
                 Comment <span className="text-red-500">*</span>
               </label>
               <textarea
+                data-test="comment-input"
                 value={content}
                 onChange={(e) => setContent(e.target.value)}
                 rows={3}
@@ -188,12 +203,14 @@ export default function Comment() {
 
             <div className="flex justify-end gap-2">
               <button
+                data-test="cancel-comment-button"
                 onClick={() => setOpenModal(false)}
                 className="btn bg-gray-300 text-black hover:bg-gray-400"
               >
                 Cancel
               </button>
               <button
+                data-test="submit-comment-button"
                 onClick={handleCreate}
                 disabled={!content.trim() || bugid === "" || creating}
                 className="btn bg-green-600 text-white hover:bg-green-700 disabled:opacity-50"
@@ -207,4 +224,3 @@ export default function Comment() {
     </div>
   );
 }
-

@@ -98,3 +98,4 @@ CREATE TABLE Comments (
     FOREIGN KEY (userid) REFERENCES Users(userid)
 );
 SELECT * FROM Users;
+SELECT * FROM Projects;

@@ -31,7 +31,7 @@ export const CreateBugModal = () => {
   } = useForm<CreateBugDTO>({
     resolver: yupResolver(schema),
     defaultValues: {
-      description: "", // ensures description is always a string for TypeScript
+      description: "",
       assigned_to: undefined,
     },
   });
@@ -49,14 +49,19 @@ export const CreateBugModal = () => {
   };
 
   return (
-    <dialog id="create-bug-modal" className="modal sm:modal-middle">
+    <dialog id="create-bug-modal" className="modal sm:modal-middle" data-test="create-bug-modal">
       <div className="modal-box bg-green-100 text-black w-full max-w-md mx-auto rounded-lg">
-        <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
+        <form
+          onSubmit={handleSubmit(onSubmit)}
+          className="flex flex-col gap-4"
+          data-test="create-bug-form"
+        >
           <input
             type="number"
             {...register("projectid")}
             placeholder="Project ID"
             className="input input-bordered w-full bg-white text-black"
+            data-test="bug-projectid-input"
           />
           {errors.projectid && <span className="text-red-700 text-sm">{errors.projectid.message}</span>}
 
@@ -65,6 +70,7 @@ export const CreateBugModal = () => {
             {...register("title")}
             placeholder="Bug Title"
             className="input input-bordered w-full bg-white text-black"
+            data-test="bug-title-input"
           />
           {errors.title && <span className="text-red-700 text-sm">{errors.title.message}</span>}
 
@@ -72,10 +78,15 @@ export const CreateBugModal = () => {
             {...register("description")}
             placeholder="Bug Description"
             className="textarea textarea-bordered w-full bg-white text-black"
+            data-test="bug-description-input"
           />
           {errors.description && <span className="text-red-700 text-sm">{errors.description.message}</span>}
 
-          <select {...register("severity")} className="select select-bordered w-full bg-white text-black">
+          <select
+            {...register("severity")}
+            className="select select-bordered w-full bg-white text-black"
+            data-test="bug-severity-select"
+          >
             <option value="">Select Severity</option>
             <option value="low">Low</option>
             <option value="medium">Medium</option>
@@ -84,7 +95,11 @@ export const CreateBugModal = () => {
           </select>
           {errors.severity && <span className="text-red-700 text-sm">{errors.severity.message}</span>}
 
-          <select {...register("status")} className="select select-bordered w-full bg-white text-black">
+          <select
+            {...register("status")}
+            className="select select-bordered w-full bg-white text-black"
+            data-test="bug-status-select"
+          >
             <option value="">Select Status</option>
             <option value="open">Open</option>
             <option value="in_progress">In Progress</option>
@@ -98,6 +113,7 @@ export const CreateBugModal = () => {
             {...register("reported_by")}
             placeholder="Reported By (User ID)"
             className="input input-bordered w-full bg-white text-black"
+            data-test="bug-reportedby-input"
           />
           {errors.reported_by && <span className="text-red-700 text-sm">{errors.reported_by.message}</span>}
 
@@ -106,6 +122,7 @@ export const CreateBugModal = () => {
             {...register("assigned_to")}
             placeholder="Assigned To (Optional User ID)"
             className="input input-bordered w-full bg-white text-black"
+            data-test="bug-assignedto-input"
           />
           {errors.assigned_to && <span className="text-red-700 text-sm">{errors.assigned_to.message}</span>}
 
@@ -114,15 +131,18 @@ export const CreateBugModal = () => {
               type="submit"
               className="btn bg-green-600 hover:bg-green-700 text-black"
               disabled={isLoading}
+              data-test="bug-submit-button"
             >
               {isLoading ? "Reporting..." : "Report Bug"}
             </button>
+
             <button
               type="button"
               className="btn bg-gray-300 hover:bg-gray-400 text-black"
               onClick={() =>
                 (document.getElementById("create-bug-modal") as HTMLDialogElement)?.close()
               }
+              data-test="bug-close-button"
             >
               Close
             </button>

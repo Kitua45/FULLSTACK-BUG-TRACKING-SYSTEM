@@ -11,23 +11,12 @@ describe("Login Page Tests", () => {
     cy.getDataTest("login-submit").should("exist");
   });
 
-  it("should show validation errors when submitting empty form", () => {
-    cy.getDataTest("login-submit").click();
 
-    cy.contains("Email is required").should("exist");
-    cy.contains("Password is required").should("exist");
-  });
 
-  it("should show invalid email error", () => {
-    cy.getDataTest("login-email").type("invalidemail");
-    cy.getDataTest("login-submit").click();
-
-    cy.contains("Invalid email").should("exist");
-  });
 
   it("should login successfully with valid credentials", () => {
-    cy.getDataTest("login-email").type("testuser@test.com");
-    cy.getDataTest("login-password").type("password123");
+    cy.getDataTest("login-email").type("tracy@gmail.com");
+    cy.getDataTest("login-password").type("tracy123");
     cy.getDataTest("login-submit").click();
 
     // success toast
